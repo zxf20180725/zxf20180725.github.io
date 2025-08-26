@@ -480,6 +480,7 @@
         function updateLevel() {
             const newLevel = parseInt(document.getElementById('level').value);
             const oldLevel = petData.level;
+            const currentRemainingPoints = getRemainingPoints();
             petData.level = newLevel;
             
             // 计算等级变化带来的点数变化
@@ -487,7 +488,6 @@
             const pointsChange = levelDiff * 10;
             
             // 获取当前剩余点数并更新
-            const currentRemainingPoints = getRemainingPoints();
             const newRemainingPoints = currentRemainingPoints + pointsChange;
             
             // 如果新的剩余点数为负数，说明当前分配的点数超过了新等级允许的总点数
@@ -500,12 +500,12 @@
                 petData.endurance = 10;
                 petData.agility = 10;
                 
-                // 重新计算剩余点数
-                const basePoints = 50; // 5个属性 × 10点
-                const totalAvailablePoints = basePoints + (newLevel * 10);
-                const newRemainingPoints = totalAvailablePoints - basePoints;
+                // 重新计算剩余点数：总点数 - 已使用的基础点数
+                const totalPoints = 50 + (newLevel * 10);
+                const usedPoints = 50; // 5个属性各10点
+                const finalRemainingPoints = totalPoints - usedPoints;
                 
-                updateRemainingPoints(newRemainingPoints);
+                updateRemainingPoints(finalRemainingPoints);
             } else {
                 updateRemainingPoints(newRemainingPoints);
             }
@@ -538,9 +538,8 @@
 
         // 获取剩余属性点
         function getRemainingPoints() {
-            const basePoints = 50; // 5个属性基础各10点
-            const levelPoints = petData.level * 10; // 每级10点
-            const totalAvailablePoints = basePoints + levelPoints;
+            // 总可用点数 = 50(基础) + 等级×10
+            const totalAvailablePoints = 50 + (petData.level * 10);
             const usedPoints = petData.constitution + petData.magic + petData.strength + petData.endurance + petData.agility;
             return totalAvailablePoints - usedPoints;
         }
