@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Coze Chat Demo</title>
+  <!-- 移动端适配，可选 -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+  <!-- 引入 CozeWebSDK -->
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.10/libs/cn/index.js"></script>
+</head>
+
+<body>
+  <!-- 页面其它内容 -->
+  <h1>点击右下角悬浮球</h1>
+
+  <!-- 初始化脚本 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new CozeWebSDK.WebChatClient({
+        config: {
+          bot_id: '7545701086834294810',
+        },
+        componentProps: {
+          title: 'Coze',
+        },
+        auth: {
+          type: 'token',
+          // ⚠️ 把下面两个地方换成你的真实 PAT
+          token: 'pat_U6Ore8ZBUrma4GziJaq7ZjbzVY8r0E083LqAqPRhDehMgFuLMP7e4sQX1BTx9uBR',
+          onRefreshToken: function () {
+            return 'pat_U6Ore8ZBUrma4GziJaq7ZjbzVY8r0E083LqAqPRhDehMgFuLMP7e4sQX1BTx9uBR';
+          },
+        },
+      });
+    });
+  </script>
+</body>
+</html>
