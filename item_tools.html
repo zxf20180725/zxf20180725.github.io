@@ -115,6 +115,11 @@
         .control-group {
             margin-bottom: 20px;
         }
+        .input-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
         label {
             display: block;
             margin-bottom: 8px;
@@ -170,8 +175,11 @@
 
     <div class="panel right-panel">
         <div class="control-group">
-            <label for="canvas-size">画布尺寸 (px)</label>
-            <input type="number" id="canvas-size" value="512">
+            <label>画布尺寸 (px)</label>
+            <div class="input-pair">
+                <input type="number" id="canvas-width" value="512" placeholder="宽度">
+                <input type="number" id="canvas-height" value="512" placeholder="高度">
+            </div>
         </div>
         <div class="control-group">
             <label for="shader-preset">预设着色器</label>
@@ -202,7 +210,8 @@
                 dropZone: document.getElementById('drop-zone'),
                 imageList: document.getElementById('image-list'),
                 previewCanvas: document.getElementById('preview-canvas'),
-                canvasSizeInput: document.getElementById('canvas-size'),
+                canvasWidthInput: document.getElementById('canvas-width'),
+                canvasHeightInput: document.getElementById('canvas-height'),
                 shaderPresetSelect: document.getElementById('shader-preset'),
                 vertexShaderText: document.getElementById('vertex-shader'),
                 fragmentShaderText: document.getElementById('fragment-shader'),
@@ -351,7 +360,9 @@
                     this.handleFiles(e.dataTransfer.files);
                 });
 
-                dom.canvasSizeInput.addEventListener('change', () => this.renderSelectedImage());
+                dom.canvasWidthInput.addEventListener('change', () => this.renderSelectedImage());
+                dom.canvasHeightInput.addEventListener('change', () => this.renderSelectedImage());
+
                 dom.shaderPresetSelect.addEventListener('change', e => {
                     const preset = this.shaders[e.target.value];
                     if (preset) {
@@ -555,10 +566,12 @@
                 potCanvas.height = this.nextPowerOf2(imageBitmap.height);
                 potCtx.drawImage(imageBitmap, 0, 0);
 
-                const size = parseInt(this.dom.canvasSizeInput.value, 10);
-                this.dom.previewCanvas.width = size;
-                this.dom.previewCanvas.height = size;
-                gl.viewport(0, 0, size, size);
+                const targetWidth = parseInt(this.dom.canvasWidthInput.value, 10);
+                const targetHeight = parseInt(this.dom.canvasHeightInput.value, 10);
+
+                this.dom.previewCanvas.width = targetWidth;
+                this.dom.previewCanvas.height = targetHeight;
+                gl.viewport(0, 0, targetWidth, targetHeight);
 
                 gl.useProgram(this.state.glProgram);
 
@@ -583,11 +596,15 @@
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
                 const bb = { width: imageBitmap.width, height: imageBitmap.height };
-                const scale = Math.min(size / bb.width, size / bb.height);
+
+                const scaleX = targetWidth / bb.width;
+                const scaleY = targetHeight / bb.height;
+                const scale = Math.min(scaleX, scaleY);
+
                 const newWidth = bb.width * scale;
                 const newHeight = bb.height * scale;
-                const x_scale = newWidth / size;
-                const y_scale = newHeight / size;
+                const x_scale = newWidth / targetWidth;
+                const y_scale = newHeight / targetHeight;
 
                 const scaleLocation = gl.getUniformLocation(this.state.glProgram, 'u_scale');
                 gl.uniform2f(scaleLocation, x_scale, y_scale);
@@ -598,7 +615,7 @@
                 gl.uniform2f(texScaleLocation, texCoordScaleX, texCoordScaleY);
 
                 const resolutionLocation = gl.getUniformLocation(this.state.glProgram, 'u_resolution');
-                gl.uniform2f(resolutionLocation, size, size);
+                gl.uniform2f(resolutionLocation, targetWidth, targetHeight);
 
                 gl.clearColor(0, 0, 0, 0);
                 gl.clear(gl.COLOR_BUFFER_BIT);
