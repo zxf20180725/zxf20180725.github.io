@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新仙二宠物加点模拟器 (深色版)</title>
+    <style>
+        /* CSS 颜色变量定义 */
+        :root {
+            --color-background: #1a1b26; /* 主背景色 */
+            --color-surface: #2a2c3d;    /* 卡片/区域背景色 */
+            --color-primary: #8a4fff;     /* 主题高亮色 (紫色) */
+            --color-primary-darker: #7a3ee8; /* 主题色悬停 */
+            --color-secondary: #03dac6; /* 次要点缀色 (青色) */
+            --color-warning: #ff5370;   /* 警告/剩余点数色 (红色) */
+            --color-success: #28a745;     /* 随机按钮色 (绿色) */
+            --color-success-darker: #218838;
+            --color-text-primary: #e0e0e0; /* 主要文字颜色 */
+            --color-text-secondary: #a0a0b0; /* 次要文字/标签颜色 */
+            --color-border: #4a4c5d;       /* 边框颜色 */
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: var(--color-background);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2); /* 半透明背景 */
+            border-radius: 15px;
+            box-shadow: 0 15px 35px var(--shadow-color);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+
+        .header {
+            background: linear-gradient(45deg, var(--color-primary), #5a32b3);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        /* 聊天链接按钮样式 */
+        .chat-link {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px 30px;
+            font-size: 20px;
+            color: white;
+            background-color: var(--color-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .chat-link:hover {
+            background-color: var(--color-primary-darker);
+        }
+
+
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: var(--color-surface);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 1px solid var(--color-border);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--color-text-primary);
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--color-text-secondary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--color-background);
+            border: 2px solid var(--color-border);
+            border-radius: 5px;
+            font-size: 14px;
+            color: var(--color-text-primary);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .attribute-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background: var(--color-background);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .attribute-name {
+            font-weight: bold;
+            min-width: 60px;
+            color: var(--color-text-secondary);
+        }
+
+        .attribute-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--color-primary-darker);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-sm:active {
+            background: var(--color-primary-darker) !important;
+            transform: scale(0.95);
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            min-width: 30px;
+        }
+
+        .btn-random {
+            background: var(--color-success);
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .btn-random:hover {
+            background: var(--color-success-darker);
+        }
+
+        .attribute-value {
+            font-weight: bold;
+            color: var(--color-text-primary);
+            min-width: 40px;
+            text-align: center;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .attribute-value:hover {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        .attribute-input {
+            font-weight: bold;
+            color: var(--color-text-primary);
+            width: 60px; /* 固定宽度防止跳动 */
+            text-align: center;
+            background: var(--color-background);
+            border: 2px solid var(--color-primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .stat-display {
+            background: var(--color-background);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+
+        .stat-name {
+            font-weight: bold;
+            color: var(--color-text-secondary);
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--color-secondary); /* 使用青色高亮数值 */
+        }
+
+        .remaining-points {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--color-warning);
+            background: var(--color-background);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .aptitude-range {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header {
+                padding: 20px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        新仙二宠物加点模拟器
+    </div>
+
+    <div class="main-content">
+        <div class="section">
+            <div class="section-title">⚙️ 基础设置</div>
+
+            <div class="form-group">
+                <label for="level">等级:</label>
+                <input type="number" id="level" min="0" max="150" value="0">
+            </div>
+
+            <div class="remaining-points">
+                剩余属性点: <span id="remainingPoints">0</span>
+            </div>
+
+            <div class="attribute-row" data-attribute="constitution">
+                <span class="attribute-name">体质</span>
+                <div class="attribute-controls">
+                    <button class="btn btn-sm">-</button>
+                    <span class="attribute-value" title="点击编辑数值">10</span>
+                    <button class="btn btn-sm">+</button>
+                </div>
+            </div>
+
+            <div class="attribute-row" data-attribute="magic">
+                <span class="attribute-name">魔力</span>
+                <div class="attribute-controls">
+                    <button class="btn btn-sm">-</button>
+                    <span class="attribute-value" title="点击编辑数值">10</span>
+                    <button class="btn btn-sm">+</button>
+                </div>
+            </div>
+
+            <div class="attribute-row" data-attribute="strength">
+                <span class="attribute-name">力量</span>
+                <div class="attribute-controls">
+                    <button class="btn btn-sm">-</button>
+                    <span class="attribute-value" title="点击编辑数值">10</span>
+                    <button class="btn btn-sm">+</button>
+                </div>
+            </div>
+
+            <div class="attribute-row" data-attribute="endurance">
+                <span class="attribute-name">耐力</span>
+                <div class="attribute-controls">
+                    <button class="btn btn-sm">-</button>
+                    <span class="attribute-value" title="点击编辑数值">10</span>
+                    <button class="btn btn-sm">+</button>
+                </div>
+            </div>
+
+            <div class="attribute-row" data-attribute="agility">
+                <span class="attribute-name">敏捷</span>
+                <div class="attribute-controls">
+                    <button class="btn btn-sm">-</button>
+                    <span class="attribute-value" title="点击编辑数值">10</span>
+                    <button class="btn btn-sm">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📊 资质设置</div>
+
+            <div class="form-group">
+                <label for="attackApt">攻击资质:</label>
+                <input type="number" id="attackApt" min="900" max="1800" value="1350">
+                <div class="aptitude-range">范围: 900-1800</div>
+            </div>
+
+            <div class="form-group">
+                <label for="defenseApt">防御资质:</label>
+                <input type="number" id="defenseApt" min="850" max="1700" value="1275">
+                <div class="aptitude-range">范围: 850-1700</div>
+            </div>
+
+            <div class="form-group">
+                <label for="hpApt">体力资质:</label>
+                <input type="number" id="hpApt" min="3500" max="7000" value="5250">
+                <div class="aptitude-range">范围: 3500-7000</div>
+            </div>
+
+            <div class="form-group">
+                <label for="mpApt">法力资质:</label>
+                <input type="number" id="mpApt" min="2100" max="4200" value="3150">
+                <div class="aptitude-range">范围: 2100-4200</div>
+            </div>
+
+            <div class="form-group">
+                <label for="speedApt">速度资质:</label>
+                <input type="number" id="speedApt" min="300" max="600" value="450">
+                <div class="aptitude-range">范围: 300-600</div>
+            </div>
+
+            <div class="form-group">
+                <label for="growth">成长:</label>
+                <input type="number" id="growth" min="1" max="1.5" step="0.01" value="1.25">
+                <div class="aptitude-range">范围: 1.00-1.50</div>
+            </div>
+
+            <button class="btn btn-random" id="randomizeBtn">🎲 随机资质</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📈 宠物属性</div>
+
+            <div class="stat-display">
+                <div class="stat-row">
+                    <span class="stat-name">🔥 体力:</span>
+                    <span class="stat-value" id="finalHp">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">💙 真气:</span>
+                    <span class="stat-value" id="finalMp">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">⚔️ 攻击:</span>
+                    <span class="stat-value" id="finalAttack">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">🛡️ 防御:</span>
+                    <span class="stat-value" id="finalDefense">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">✨ 灵力:</span>
+                    <span class="stat-value" id="finalSpirit">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">💨 身法:</span>
+                    <span class="stat-value" id="finalSpeed">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const petSimulator = {
+        // 1. 状态管理：存储所有数据
+        state: {
+            level: 0,
+            constitution: 10, magic: 10, strength: 10, endurance: 10, agility: 10,
+            attackApt: 1350, defenseApt: 1275, hpApt: 5250, mpApt: 3150, speedApt: 450,
+            growth: 1.25
+        },
+
+        // 2. DOM 元素缓存
+        dom: {},
+
+        // 3. 长按功能相关变量
+        longPress: {
+            timer: null,
+            attribute: null,
+            change: 0,
+            speed: 200,
+            count: 0,
+            isPressing: false
+        },
+
+        // 4. 初始化方法
+        init() {
+            this.cacheDom();
+            this.bindEvents();
+            this.updateAll();
+        },
+
+        // 缓存所有需要操作的 DOM 元素
+        cacheDom() {
+            this.dom.level = document.getElementById('level');
+            this.dom.remainingPoints = document.getElementById('remainingPoints');
+            this.dom.randomizeBtn = document.getElementById('randomizeBtn');
+
+            // 缓存属性行
+            this.dom.attributeRows = {};
+            document.querySelectorAll('.attribute-row').forEach(row => {
+                const attr = row.dataset.attribute;
+                this.dom.attributeRows[attr] = {
+                    valueDisplay: row.querySelector('.attribute-value'),
+                    btnMinus: row.querySelectorAll('.btn-sm')[0],
+                    btnPlus: row.querySelectorAll('.btn-sm')[1]
+                };
+            });
+
+            // 缓存资质输入框
+            const aptitudeIds = ['attackApt', 'defenseApt', 'hpApt', 'mpApt', 'speedApt', 'growth'];
+            this.dom.aptitudeInputs = {};
+            aptitudeIds.forEach(id => this.dom.aptitudeInputs[id] = document.getElementById(id));
+
+            // 缓存最终属性显示
+            const finalStatIds = ['finalHp', 'finalMp', 'finalAttack', 'finalDefense', 'finalSpirit', 'finalSpeed'];
+            this.dom.finalStats = {};
+            finalStatIds.forEach(id => this.dom.finalStats[id] = document.getElementById(id));
+        },
+
+        // 绑定所有事件监听器
+        bindEvents() {
+            // 等级变化
+            this.dom.level.addEventListener('change', this.handleLevelChange.bind(this));
+
+            // 资质输入变化
+            for (const id in this.dom.aptitudeInputs) {
+                this.dom.aptitudeInputs[id].addEventListener('input', (e) => {
+                    this.state[id] = parseFloat(e.target.value);
+                    this.updateAll();
+                });
+            }
+
+            // 属性点 +/- 按钮事件
+            for (const attr in this.dom.attributeRows) {
+                const row = this.dom.attributeRows[attr];
+                // 减号
+                row.btnMinus.addEventListener('mousedown', () => this.startLongPress(attr, -1));
+                row.btnMinus.addEventListener('mouseup', this.stopLongPress.bind(this));
+                row.btnMinus.addEventListener('mouseleave', this.stopLongPress.bind(this));
+                row.btnMinus.addEventListener('click', () => this.changeAttribute(attr, -1));
+                // 加号
+                row.btnPlus.addEventListener('mousedown', () => this.startLongPress(attr, 1));
+                row.btnPlus.addEventListener('mouseup', this.stopLongPress.bind(this));
+                row.btnPlus.addEventListener('mouseleave', this.stopLongPress.bind(this));
+                row.btnPlus.addEventListener('click', () => this.changeAttribute(attr, 1));
+                // 点击数值直接编辑
+                row.valueDisplay.addEventListener('click', (e) => this.startEdit(e.target));
+            }
+
+            // 随机资质按钮
+            this.dom.randomizeBtn.addEventListener('click', this.randomizeAptitudes.bind(this));
+
+            // 防止右键菜单干扰长按
+            document.addEventListener('contextmenu', e => {
+                if (e.target.classList.contains('btn-sm')) e.preventDefault();
+            });
+        },
+
+        // 5. 核心业务逻辑方法
+
+        // 计算剩余点数 (纯函数)
+        getRemainingPoints() {
+            const total = 50 + (this.state.level * 10);
+            const used = Object.keys(this.dom.attributeRows).reduce((sum, attr) => sum + this.state[attr], 0);
+            return total - used;
+        },
+
+        // 改变属性点
+        changeAttribute(attribute, change) {
+            const currentVal = this.state[attribute];
+            const newVal = currentVal + change;
+
+            if (change < 0 && newVal < 10) return; // 不能低于10
+            if (change > 0 && this.getRemainingPoints() < change) return; // 点数不足
+
+            this.state[attribute] = newVal;
+            this.updateAll();
+        },
+
+        // 处理等级变化
+        handleLevelChange() {
+            const oldLevel = this.state.level;
+            const newLevel = parseInt(this.dom.level.value) || 0;
+            this.state.level = newLevel;
+
+            // 如果降级导致点数不足，则重置属性点
+            if (this.getRemainingPoints() < 0) {
+                for (const attr in this.dom.attributeRows) {
+                    this.state[attr] = 10;
+                }
+            }
+            this.updateAll();
+        },
+
+        // 随机资质
+        randomizeAptitudes() {
+            this.state.attackApt = Math.floor(Math.random() * (1800 - 900 + 1)) + 900;
+            this.state.defenseApt = Math.floor(Math.random() * (1700 - 850 + 1)) + 850;
+            this.state.hpApt = Math.floor(Math.random() * (7000 - 3500 + 1)) + 3500;
+            this.state.mpApt = Math.floor(Math.random() * (4200 - 2100 + 1)) + 2100;
+            this.state.speedApt = Math.floor(Math.random() * (600 - 300 + 1)) + 300;
+            this.state.growth = Math.round((Math.random() * (1.5 - 1) + 1) * 100) / 100;
+            this.updateAll();
+        },
+
+        // *** 核心计算公式 (保持不变) ***
+        calculateStats() {
+            const s = this.state;
+            const stats = {};
+
+            stats.finalHp = Math.floor(s.level * s.hpApt / 1000 + s.constitution * s.growth * 6);
+            stats.finalMp = Math.floor(s.level * s.mpApt / 500 + s.magic * s.growth * 3);
+            stats.finalAttack = Math.floor((s.level * s.attackApt / 1000) * 4 / 3 * (1.4 + s.growth) + s.strength * s.growth);
+            stats.finalDefense = Math.floor((s.level * s.defenseApt / 1000) * 7 / 8 * (1.4 + s.growth) + s.endurance * s.growth * 1.33);
+            stats.finalSpirit = Math.floor(s.level * (s.mpApt * 3 + 5000) / 10000 + s.constitution * 0.3 + s.endurance * 0.2 + s.strength * 0.4 + s.magic * 0.7);
+            stats.finalSpeed = 20 + Math.floor(s.agility * s.speedApt / 10000);
+
+            return stats;
+        },
+
+        // 6. UI 更新方法
+        updateAll() {
+            const finalStats = this.calculateStats();
+
+            // 更新剩余点数
+            this.dom.remainingPoints.textContent = this.getRemainingPoints();
+
+            // 更新基础属性显示
+            for (const attr in this.dom.attributeRows) {
+                this.dom.attributeRows[attr].valueDisplay.textContent = this.state[attr];
+            }
+
+            // 更新资质输入框的值 (用于随机资质后)
+            for (const id in this.dom.aptitudeInputs) {
+                this.dom.aptitudeInputs[id].value = this.state[id];
+            }
+
+            // 更新最终属性
+            for (const stat in this.dom.finalStats) {
+                this.dom.finalStats[stat].textContent = finalStats[stat];
+            }
+        },
+
+        // 7. 用户体验增强功能 (长按/编辑)
+        startLongPress(attribute, change) {
+            if (this.longPress.isPressing) return;
+
+            Object.assign(this.longPress, { attribute, change, speed: 200, count: 0, isPressing: true });
+
+            this.longPress.timer = setTimeout(() => {
+                this.continueLongPress();
+            }, 500);
+        },
+
+        continueLongPress() {
+            if (!this.longPress.isPressing) return;
+
+            this.changeAttribute(this.longPress.attribute, this.longPress.change);
+            this.longPress.count++;
+
+            if (this.longPress.count % 5 === 0 && this.longPress.speed > 10) {
+                this.longPress.speed = Math.max(10, this.longPress.speed * 0.8);
+            }
+
+            this.longPress.timer = setTimeout(() => this.continueLongPress(), this.longPress.speed);
+        },
+
+        stopLongPress() {
+            clearTimeout(this.longPress.timer);
+            this.longPress.isPressing = false;
+        },
+
+        startEdit(element) {
+            if (document.querySelector('.attribute-input')) return; // 防止重复创建
+
+            const attribute = element.parentElement.parentElement.dataset.attribute;
+            const currentValue = this.state[attribute];
+
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.value = currentValue;
+            input.min = '10';
+            input.className = 'attribute-input';
+
+            const finish = (apply) => {
+                if (apply) {
+                    const newValue = parseInt(input.value) || 10;
+                    if (newValue >= 10) {
+                        const pointChange = newValue - currentValue;
+                        if (pointChange <= this.getRemainingPoints()) {
+                            this.state[attribute] = newValue;
+                        } else {
+                            alert(`点数不足！最多还能分配 ${this.getRemainingPoints()} 点`);
+                        }
+                    }
+                }
+                element.style.display = '';
+                input.replaceWith(element);
+                this.updateAll();
+            };
+
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') input.blur();
+                if (e.key === 'Escape') finish(false);
+            });
+            input.addEventListener('blur', () => finish(true));
+
+            element.style.display = 'none';
+            element.parentElement.insertBefore(input, element.nextSibling);
+            input.focus();
+            input.select();
+        }
+    };
+
+    // 页面加载完成后启动模拟器
+    document.addEventListener('DOMContentLoaded', () => petSimulator.init());
+</script>
+</body>
+</html>
