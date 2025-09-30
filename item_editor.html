@@ -7,30 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 自定义深色主题滚动条和一些小样式 */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #2d3748; /* gray-800 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4a5568; /* gray-600 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #718096; /* gray-500 */
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .full-span {
-            grid-column: 1 / -1;
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #2d3748; }
+        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #718096; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .full-span { grid-column: 1 / -1; }
+        /* 保存按钮的提示动效 */
+        .glow {
+            box-shadow: 0 0 5px #2dd4bf, 0 0 10px #2dd4bf, 0 0 15px #2dd4bf;
         }
     </style>
 </head>
@@ -71,310 +57,197 @@
             <p>然后选择一个物品进行编辑。</p>
         </div>
         <form id="item-form" class="hidden space-y-6">
-            <fieldset class="border border-gray-600 p-4 rounded">
-                <legend class="font-semibold px-2 text-gray-300">基本信息</legend>
-                <div class="flex items-start space-x-4">
-                    <div class="flex-grow form-grid">
-                        <div class="form-group"><label for="id">ID (id)</label><input type="text" id="id" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                        <div class="form-group"><label for="name">名称 (name)</label><input type="text" id="name" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                        <div class="form-group"><label for="icon">图标 ID (icon)</label><input type="text" id="icon" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                        <div class="form-group"><label for="aniId">动画 ID (aniId)</label><input type="text" id="aniId" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                        <div class="form-group full-span"><label for="desc">详细描述 (desc)</label><textarea id="desc" rows="3" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></textarea></div>
-                        <div class="form-group full-span"><label for="tip">简介 (tip)</label><textarea id="tip" rows="2" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></textarea></div>
-                    </div>
-                    <div class="form-group text-center">
-                        <label>图标预览</label>
-                        <img id="icon-preview" src="" alt="Icon" class="mt-1 w-24 h-24 border border-gray-600 rounded bg-gray-700 object-contain" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2EwYTBhMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1pbWFnZSI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcng9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNCAyMSI+PC9wb2x5bGluZT48L3N2Zz4='; this.onerror=null;">
-                    </div>
-                </div>
-            </fieldset>
+            <fieldset class="border border-gray-600 p-4 rounded"><legend class="font-semibold px-2 text-gray-300">基本信息</legend><div class="flex items-start space-x-4"><div class="flex-grow form-grid"><div class="form-group"><label for="id">ID (id)</label><input type="text" id="id" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="name">名称 (name)</label><input type="text" id="name" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="icon">图标 ID (icon)</label><input type="text" id="icon" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="aniId">动画 ID (aniId)</label><input type="text" id="aniId" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group full-span"><label for="desc">详细描述 (desc)</label><textarea id="desc" rows="3" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></textarea></div><div class="form-group full-span"><label for="tip">简介 (tip)</label><textarea id="tip" rows="2" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></textarea></div></div><div class="form-group text-center"><label>图标预览</label><img id="icon-preview" src="" alt="Icon" class="mt-1 w-24 h-24 border border-gray-600 rounded bg-gray-700 object-contain" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2EwYTBhMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9ImZlYXRoZXIgZmVhdGhlci1pbWFnZSI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcng9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMjEgMTUgMTYgMTAgNCAyMSI+PC9wb2x5bGluZT48L3N2Zz4='; this.onerror=null;"></div></div></fieldset>
+            <fieldset class="border border-gray-600 p-4 rounded"><legend class="font-semibold px-2 text-gray-300">属性与限制</legend><div class="form-grid"><div class="form-group"><label for="type">物品类型 (type)</label><select id="type" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></select></div><div class="form-group"><label for="levelLimit">等级限制 (levelLimit)</label><input type="number" id="levelLimit" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="sellingPrice">售价 (sellingPrice)</label><input type="number" id="sellingPrice" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="liliang">力量 (liliang)</label><input type="number" id="liliang" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="moli">魔力 (moli)</label><input type="number" id="moli" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="minjie">敏捷 (minjie)</label><input type="number" id="minjie" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="tizhi">体质 (tizhi)</label><input type="number" id="tizhi" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="naili">耐力 (naili)</label><input type="number" id="naili" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label>角色限制 (actorLimit)</label><div id="actorLimit" class="mt-2 space-x-4"></div></div></div></fieldset>
+            <fieldset class="border border-gray-600 p-4 rounded"><legend class="font-semibold px-2 text-gray-300">使用效果</legend><div class="form-grid"><div class="form-group"><label for="tmpHp">临时加血 (tmpHp)</label><input type="number" id="tmpHp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="tmpMp">临时加蓝 (tmpMp)</label><input type="number" id="tmpMp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="rate">概率 (rate)</label><input type="number" step="0.1" id="rate" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="round">回合数 (round)</label><input type="number" id="round" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div></div><div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4"><label class="flex items-center space-x-2"><input type="checkbox" id="inFight" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>战斗中使用</span></label><label class="flex items-center space-x-2"><input type="checkbox" id="inNormal" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>非战斗使用</span></label><label class="flex items-center space-x-2"><input type="checkbox" id="aoe" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>群体生效</span></label><label class="flex items-center space-x-2"><input type="checkbox" id="toDead" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>对阵亡单位</span></label><label class="flex items-center space-x-2"><input type="checkbox" id="toLiving" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>对存活单位</span></label></div></fieldset>
+            <fieldset class="border border-gray-600 p-4 rounded"><legend class="font-semibold px-2 text-gray-300">装备属性</legend><div class="form-grid"><div class="form-group"><label for="equipType">装备类型 (equipType)</label><select id="equipType" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></select></div><div class="form-group"><label for="equipHp">气血 (equipHp)</label><input type="number" id="equipHp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipMp">魔法 (equipMp)</label><input type="number" id="equipMp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipAd">攻击 (equipAd)</label><input type="number" id="equipAd" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipAp">灵力 (equipAp)</label><input type="number" id="equipAp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipPd">防御 (equipPd)</label><input type="number" id="equipPd" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipJY">吉运 (equipJY)</label><input type="number" id="equipJY" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="equipV">身法 (equipV)</label><input type="number" id="equipV" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group"><label for="slowRes">抗减速 (slowRes)</label><input type="number" step="0.1" id="slowRes" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div></div></fieldset>
+            <fieldset class="border border-gray-600 p-4 rounded"><legend class="font-semibold px-2 text-gray-300">叠加信息</legend><div class="form-grid"><div class="form-group"><label for="maxOverlay">最大堆叠数 (maxOverlay)</label><input type="number" id="maxOverlay" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div><div class="form-group flex-row items-center pt-6 space-x-2"><input type="checkbox" id="overlay" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"> <label for="overlay">是否可叠加 (overlay)</label></div></div></fieldset>
 
-            <fieldset class="border border-gray-600 p-4 rounded">
-                <legend class="font-semibold px-2 text-gray-300">属性与限制</legend>
-                <div class="form-grid">
-                    <div class="form-group"><label for="type">物品类型 (type)</label><select id="type" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></select></div>
-                    <div class="form-group"><label for="levelLimit">等级限制 (levelLimit)</label><input type="number" id="levelLimit" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="sellingPrice">售价 (sellingPrice)</label><input type="number" id="sellingPrice" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="liliang">力量 (liliang)</label><input type="number" id="liliang" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="moli">魔力 (moli)</label><input type="number" id="moli" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="minjie">敏捷 (minjie)</label><input type="number" id="minjie" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="tizhi">体质 (tizhi)</label><input type="number" id="tizhi" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="naili">耐力 (naili)</label><input type="number" id="naili" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group">
-                        <label>角色限制 (actorLimit)</label>
-                        <div id="actorLimit" class="mt-2 space-x-4"></div>
-                    </div>
+            <div class="p-4 bg-gray-800 rounded-lg space-y-4">
+                <div class="flex space-x-4">
+                    <button type="button" id="save-changes" class="w-full bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition-all duration-300">保存修改</button>
+                    <button type="button" id="revert-changes" class="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">撤销更改</button>
                 </div>
-            </fieldset>
+                <span id="save-status" class="text-sm text-teal-400 h-4 block"></span>
+                <button type="button" id="delete-item" class="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">删除此物品</button>
+            </div>
 
-            <fieldset class="border border-gray-600 p-4 rounded">
-                <legend class="font-semibold px-2 text-gray-300">使用效果</legend>
-                <div class="form-grid">
-                    <div class="form-group"><label for="tmpHp">临时加血 (tmpHp)</label><input type="number" id="tmpHp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="tmpMp">临时加蓝 (tmpMp)</label><input type="number" id="tmpMp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="rate">概率 (rate)</label><input type="number" step="0.1" id="rate" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="round">回合数 (round)</label><input type="number" id="round" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                </div>
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <label class="flex items-center space-x-2"><input type="checkbox" id="inFight" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>战斗中使用</span></label>
-                    <label class="flex items-center space-x-2"><input type="checkbox" id="inNormal" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>非战斗使用</span></label>
-                    <label class="flex items-center space-x-2"><input type="checkbox" id="aoe" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>群体生效</span></label>
-                    <label class="flex items-center space-x-2"><input type="checkbox" id="toDead" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>对阵亡单位</span></label>
-                    <label class="flex items-center space-x-2"><input type="checkbox" id="toLiving" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"><span>对存活单位</span></label>
-                </div>
-            </fieldset>
-
-            <fieldset class="border border-gray-600 p-4 rounded">
-                <legend class="font-semibold px-2 text-gray-300">装备属性</legend>
-                <div class="form-grid">
-                    <div class="form-group"><label for="equipType">装备类型 (equipType)</label><select id="equipType" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></select></div>
-                    <div class="form-group"><label for="equipHp">气血 (equipHp)</label><input type="number" id="equipHp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipMp">魔法 (equipMp)</label><input type="number" id="equipMp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipAd">攻击 (equipAd)</label><input type="number" id="equipAd" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipAp">灵力 (equipAp)</label><input type="number" id="equipAp" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipPd">防御 (equipPd)</label><input type="number" id="equipPd" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipJY">吉运 (equipJY)</label><input type="number" id="equipJY" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="equipV">身法 (equipV)</label><input type="number" id="equipV" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group"><label for="slowRes">抗减速 (slowRes)</label><input type="number" step="0.1" id="slowRes" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                </div>
-            </fieldset>
-
-            <fieldset class="border border-gray-600 p-4 rounded">
-                <legend class="font-semibold px-2 text-gray-300">叠加信息</legend>
-                <div class="form-grid">
-                    <div class="form-group"><label for="maxOverlay">最大堆叠数 (maxOverlay)</label><input type="number" id="maxOverlay" class="mt-1 p-2 border bg-gray-600 border-gray-500 rounded text-gray-200"></div>
-                    <div class="form-group flex-row items-center pt-6 space-x-2">
-                        <input type="checkbox" id="overlay" class="form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded"> <label for="overlay">是否可叠加 (overlay)</label>
-                    </div>
-                </div>
-            </fieldset>
-
-            <button type="button" id="delete-item" class="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">删除此物品</button>
         </form>
     </main>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        let items = [];
-        let currentItemId = null;
+        let items = []; // 数据源
+        let selectedItemId = null; // 当前选中物品的ID
+        let editingItemCopy = null; // 用于编辑的物品副本
+        let hasUnsavedChanges = false; // 是否有未保存的更改
 
+        // --- DOM 元素 ---
         const DOM = {
-            jsonUpload: document.getElementById('json-upload'),
-            exportJsonBtn: document.getElementById('export-json'),
-            searchBox: document.getElementById('search-box'),
-            typeFilter: document.getElementById('type-filter'),
-            addItemBtn: document.getElementById('add-item'),
-            itemList: document.getElementById('item-list'),
-            editorArea: document.getElementById('editor-area'),
-            welcomeMessage: document.getElementById('welcome-message'),
-            itemForm: document.getElementById('item-form'),
-            iconPreview: document.getElementById('icon-preview'),
-            deleteItemBtn: document.getElementById('delete-item'),
+            jsonUpload: document.getElementById('json-upload'), exportJsonBtn: document.getElementById('export-json'),
+            searchBox: document.getElementById('search-box'), typeFilter: document.getElementById('type-filter'),
+            addItemBtn: document.getElementById('add-item'), itemList: document.getElementById('item-list'),
+            welcomeMessage: document.getElementById('welcome-message'), itemForm: document.getElementById('item-form'),
+            iconPreview: document.getElementById('icon-preview'), deleteItemBtn: document.getElementById('delete-item'),
+            saveChangesBtn: document.getElementById('save-changes'), revertChangesBtn: document.getElementById('revert-changes'),
+            saveStatus: document.getElementById('save-status'),
         };
 
-        const formFields = [
-            'id', 'aniId', 'icon', 'name', 'desc', 'tip', 'type', 'levelLimit', 'tmpHp', 'tmpMp', 'moli',
-            'liliang', 'minjie', 'tizhi', 'naili', 'sellingPrice', 'equipType', 'equipHp', 'equipMp',
-            'equipAd', 'equipAp', 'equipPd', 'equipJY', 'equipV', 'slowRes', 'rate', 'round', 'maxOverlay'
-        ];
-
+        // --- 字段定义 (与之前相同) ---
+        const formFields = ['id', 'aniId', 'icon', 'name', 'desc', 'tip', 'type', 'levelLimit', 'tmpHp', 'tmpMp', 'moli', 'liliang', 'minjie', 'tizhi', 'naili', 'sellingPrice', 'equipType', 'equipHp', 'equipMp', 'equipAd', 'equipAp', 'equipPd', 'equipJY', 'equipV', 'slowRes', 'rate', 'round', 'maxOverlay'];
         const checkboxFields = ['inFight', 'inNormal', 'aoe', 'toDead', 'toLiving', 'overlay'];
-
         const itemTypes = ['加血','加蓝','双加','属性点','经验','洗点','盲盒','金钱','技能书','其他','宠物蛋','装备','毒','疯魔','眩晕','阵符','宠物材料'];
         const actorTypes = ['wxl', 'sqs', 'lyr', 'sm', 'lm'];
         const equipTypes = {0:'脚穿', 1:'佩戴', 2:'手持', 3:'身着', 4:'披挂', 5:'头戴'};
 
-        function setupDropdowns() {
-            itemTypes.forEach(type => {
-                DOM.typeFilter.innerHTML += `<option value="${type}">${type}</option>`;
-                document.getElementById('type').innerHTML += `<option value="${type}">${type}</option>`;
-            });
-            Object.entries(equipTypes).forEach(([key, value]) => {
-                document.getElementById('equipType').innerHTML += `<option value="${key}">${value}</option>`;
-            });
-            const actorContainer = document.getElementById('actorLimit');
-            actorTypes.forEach(actor => {
-                actorContainer.innerHTML += `<label class="inline-flex items-center"><input type="checkbox" class="actor-limit-cb form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded" value="${actor}" /> <span class="ml-2">${actor}</span></label>`;
-            });
+        // --- 初始化 ---
+        function setupDropdowns() { /* ... 与之前相同 ... */ itemTypes.forEach(t => { DOM.typeFilter.innerHTML += `<option value="${t}">${t}</option>`; document.getElementById('type').innerHTML += `<option value="${t}">${t}</option>`; }); Object.entries(equipTypes).forEach(([k, v]) => { document.getElementById('equipType').innerHTML += `<option value="${k}">${v}</option>`; }); const a = document.getElementById('actorLimit'); actorTypes.forEach(t => { a.innerHTML += `<label class="inline-flex items-center"><input type="checkbox" class="actor-limit-cb form-checkbox h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded" value="${t}" /> <span class="ml-2">${t}</span></label>`; }); }
+
+        // --- 核心逻辑 ---
+
+        // 检查是否有未保存的更改
+        function checkForUnsavedChanges() {
+            if (hasUnsavedChanges) {
+                return confirm("您有未保存的更改，确定要放弃吗？");
+            }
+            return true; // 没有未保存的更改，允许继续
         }
 
-        function renderItemList() {
-            DOM.itemList.innerHTML = '';
-            const searchTerm = DOM.searchBox.value.toLowerCase();
-            const typeFilter = DOM.typeFilter.value;
-
-            const filteredItems = items.filter(item => {
-                const nameMatch = item.name.toLowerCase().includes(searchTerm) || item.id.toLowerCase().includes(searchTerm);
-                const typeMatch = !typeFilter || item.type === typeFilter;
-                return nameMatch && typeMatch;
-            });
-
-            if (filteredItems.length === 0) {
-                DOM.itemList.innerHTML = '<p class="p-4 text-gray-400">没有找到物品。</p>';
+        // 更新未保存状态的UI提示
+        function updateUnsavedIndicator(isUnsaved) {
+            hasUnsavedChanges = isUnsaved;
+            if (isUnsaved) {
+                DOM.saveChangesBtn.classList.add('glow');
+                DOM.saveStatus.textContent = '有未保存的更改...';
             } else {
-                filteredItems.forEach(item => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = `p-4 cursor-pointer border-b border-gray-700 hover:bg-gray-700 ${item.id === currentItemId ? 'bg-slate-700' : ''}`;
-                    itemEl.dataset.id = item.id;
-                    itemEl.innerHTML = `
-                            <div class="font-semibold text-white">${item.name || '未命名'}</div>
-                            <div class="text-sm text-gray-400">ID: ${item.id}</div>
-                        `;
-                    itemEl.addEventListener('click', () => selectItem(item.id));
-                    DOM.itemList.appendChild(itemEl);
-                });
+                DOM.saveChangesBtn.classList.remove('glow');
+                DOM.saveStatus.textContent = '';
             }
         }
 
+        // 渲染物品列表
+        function renderItemList() { /* ... 与之前相同 ... */ DOM.itemList.innerHTML = ''; const q = DOM.searchBox.value.toLowerCase(); const f = DOM.typeFilter.value; const filtered = items.filter(i => (i.name.toLowerCase().includes(q) || i.id.toLowerCase().includes(q)) && (!f || i.type === f)); if (filtered.length === 0) { DOM.itemList.innerHTML = '<p class="p-4 text-gray-400">没有找到物品。</p>'; return; } filtered.forEach(i => { const el = document.createElement('div'); el.className = `p-4 cursor-pointer border-b border-gray-700 hover:bg-gray-700 ${i.id === selectedItemId ? 'bg-slate-700' : ''}`; el.dataset.id = i.id; el.innerHTML = `<div class="font-semibold text-white">${i.name || '未命名'}</div><div class="text-sm text-gray-400">ID: ${i.id}</div>`; el.addEventListener('click', () => selectItem(i.id)); DOM.itemList.appendChild(el); });}
+
+        // 选择一个物品进行编辑
         function selectItem(id) {
-            currentItemId = id;
-            const item = items.find(i => i.id === id);
-            if (item) {
-                renderEditor(item);
+            if (!checkForUnsavedChanges()) return; // 如果用户取消，则中止
+
+            selectedItemId = id;
+            const originalItem = items.find(i => i.id === id);
+            if (originalItem) {
+                // 创建一个深拷贝用于编辑，不直接修改原始数据
+                editingItemCopy = JSON.parse(JSON.stringify(originalItem));
+                renderEditor(editingItemCopy);
             }
+            updateUnsavedIndicator(false);
             renderItemList();
         }
 
+        // 渲染编辑器表单
         function renderEditor(item) {
             DOM.welcomeMessage.classList.add('hidden');
             DOM.itemForm.classList.remove('hidden');
-
-            formFields.forEach(field => {
-                const el = document.getElementById(field);
-                if (el) el.value = item[field] ?? '';
-            });
-
-            checkboxFields.forEach(field => {
-                const el = document.getElementById(field);
-                if (el) el.checked = item[field] === true;
-            });
-
-            document.querySelectorAll('.actor-limit-cb').forEach(cb => {
-                cb.checked = (item.actorLimit || []).includes(cb.value);
-            });
-
+            formFields.forEach(f => { const el = document.getElementById(f); if(el) el.value = item[f] ?? ''; });
+            checkboxFields.forEach(f => { const el = document.getElementById(f); if(el) el.checked = item[f] === true; });
+            document.querySelectorAll('.actor-limit-cb').forEach(cb => { cb.checked = (item.actorLimit || []).includes(cb.value); });
             updateIconPreview(item.icon);
         }
 
-        function updateIconPreview(iconId) {
-            DOM.iconPreview.src = iconId ? `./images/${iconId}.png` : '';
-        }
+        // 更新图标预览
+        function updateIconPreview(iconId) { DOM.iconPreview.src = iconId ? `./images/${iconId}.png` : ''; }
 
+        // 处理表单输入，只更新副本
         function handleFormInput(event) {
-            if (!currentItemId) return;
-
-            const item = items.find(i => i.id === currentItemId);
-            if (!item) return;
+            if (!editingItemCopy) return;
 
             const { id, type, value, checked } = event.target;
 
-            if (checkboxFields.includes(id) || type === 'checkbox') {
+            if (type === 'checkbox') {
                 if (event.target.classList.contains('actor-limit-cb')) {
                     const selectedActors = Array.from(document.querySelectorAll('.actor-limit-cb:checked')).map(cb => cb.value);
-                    item.actorLimit = selectedActors;
+                    editingItemCopy.actorLimit = selectedActors;
                 } else {
-                    item[id] = checked;
+                    editingItemCopy[id] = checked;
                 }
             } else {
                 const numFields = ['levelLimit', 'tmpHp', 'tmpMp', 'moli', 'liliang', 'minjie', 'tizhi', 'naili', 'sellingPrice', 'equipType', 'equipHp', 'equipMp', 'equipAd', 'equipAp', 'equipPd', 'equipJY', 'equipV', 'round', 'maxOverlay'];
                 const floatFields = ['slowRes', 'rate'];
-                if (numFields.includes(id)) {
-                    item[id] = parseInt(value, 10) || 0;
-                } else if (floatFields.includes(id)) {
-                    item[id] = parseFloat(value) || 0.0;
-                } else {
-                    item[id] = value;
-                }
+                if (numFields.includes(id)) editingItemCopy[id] = parseInt(value, 10) || 0;
+                else if (floatFields.includes(id)) editingItemCopy[id] = parseFloat(value) || 0.0;
+                else editingItemCopy[id] = value;
             }
 
-            if (id === 'id') {
-                const oldId = currentItemId;
-                currentItemId = value;
-                const itemEl = DOM.itemList.querySelector(`[data-id="${oldId}"]`);
-                if (itemEl) itemEl.dataset.id = value;
-            }
+            if (id === 'icon') updateIconPreview(value);
 
-            if (id === 'icon') {
-                updateIconPreview(value);
-            }
+            updateUnsavedIndicator(true);
+        }
 
-            if (id === 'name' || id === 'id') {
-                renderItemList();
+        // 保存修改
+        function saveChanges() {
+            if (!editingItemCopy) return;
+
+            const itemIndex = items.findIndex(i => i.id === selectedItemId);
+            if (itemIndex > -1) {
+                // 将副本的更改应用到原始数据源
+                items[itemIndex] = JSON.parse(JSON.stringify(editingItemCopy));
+
+                // 如果ID被修改，需要更新selectedItemId
+                selectedItemId = editingItemCopy.id;
+
+                updateUnsavedIndicator(false);
+                DOM.saveStatus.textContent = '保存成功！';
+                setTimeout(() => DOM.saveStatus.textContent = '', 2000);
+                renderItemList(); // 重新渲染列表以更新可能的名称/ID变化
             }
         }
 
+        // 撤销更改
+        function revertChanges() {
+            if (!selectedItemId) return;
+            selectItem(selectedItemId); // 重新选择当前项，会从原始数据重新加载
+        }
+
+        // 添加新物品
         function addNewItem() {
-            const newItem = {
-                id: `new_item_${Date.now()}`,
-                aniId: "", icon: "", name: "新物品", desc: "", tip: "",
-                type: itemTypes[0], levelLimit: 0, actorLimit: [], aoe: false, tmpHp: 0, tmpMp: 0, rate: 0.0, round: 0,
-                liliang: 0, moli: 0, naili: 0, tizhi: 0, minjie: 0, inFight: false, inNormal: true, toDead: false, toLiving: true,
-                equipType: 0, equipHp: 0, equipMp: 0, equipAd: 0, equipAp: 0, equipPd: 0, equipJY: 0, equipV: 0,
-                slowRes: 0.0, sellingPrice: 0, overlay: true, maxOverlay: 1
-            };
+            if (!checkForUnsavedChanges()) return;
+
+            const newItem = { id: `new_item_${Date.now()}`, name: "新物品", /* ... 默认值 ... */ aniId: "", icon: "", desc: "", tip: "", type: itemTypes[0], levelLimit: 0, actorLimit: [], aoe: false, tmpHp: 0, tmpMp: 0, rate: 0.0, round: 0, liliang: 0, moli: 0, naili: 0, tizhi: 0, minjie: 0, inFight: false, inNormal: true, toDead: false, toLiving: true, equipType: 0, equipHp: 0, equipMp: 0, equipAd: 0, equipAp: 0, equipPd: 0, equipJY: 0, equipV: 0, slowRes: 0.0, sellingPrice: 0, overlay: true, maxOverlay: 1};
             items.unshift(newItem);
             selectItem(newItem.id);
         }
 
+        // 删除物品
         function deleteItem() {
-            if (!currentItemId) return;
-
-            if (confirm(`确定要删除物品 "${currentItemId}" 吗？此操作无法撤销。`)) {
-                const index = items.findIndex(i => i.id === currentItemId);
+            if (!selectedItemId) return;
+            if (confirm(`确定要删除物品 "${selectedItemId}" 吗？此操作无法撤销。`)) {
+                const index = items.findIndex(i => i.id === selectedItemId);
                 if (index > -1) {
                     items.splice(index, 1);
-                    currentItemId = null;
+                    selectedItemId = null;
+                    editingItemCopy = null;
                     DOM.itemForm.classList.add('hidden');
                     DOM.welcomeMessage.classList.remove('hidden');
+                    updateUnsavedIndicator(false);
                     renderItemList();
                 }
             }
         }
 
-        DOM.jsonUpload.addEventListener('change', event => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    try {
-                        items = JSON.parse(e.target.result);
-                        items.forEach(item => {
-                            if(item.overlay === undefined) item.overlay = true;
-                            if(item.maxOverlay === undefined) item.maxOverlay = 1;
-                        });
-                        renderItemList();
-                        DOM.welcomeMessage.classList.remove('hidden');
-                        DOM.itemForm.classList.add('hidden');
-                    } catch (err) {
-                        alert('JSON 文件格式错误！');
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
+        // --- 文件操作 ---
+        DOM.jsonUpload.addEventListener('change', event => { /* ... 与之前相同 ... */ const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { try { items = JSON.parse(e.target.result); items.forEach(i => { if(i.overlay === undefined) i.overlay = true; if(i.maxOverlay === undefined) i.maxOverlay = 1; }); renderItemList(); DOM.welcomeMessage.classList.remove('hidden'); DOM.itemForm.classList.add('hidden'); } catch (err) { alert('JSON 文件格式错误！'); } }; reader.readAsText(file); } });
+        DOM.exportJsonBtn.addEventListener('click', () => { if (hasUnsavedChanges) { if (!confirm("您有未保存的更改，导出的JSON将不包含这些更改。确定要继续导出吗？")) return; } if (items.length === 0) { alert('没有可导出的数据。'); return; } const dataStr = JSON.stringify(items, null, 4); const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr); const exportFileDefaultName = 'items.json'; const linkElement = document.createElement('a'); linkElement.setAttribute('href', dataUri); linkElement.setAttribute('download', exportFileDefaultName); linkElement.click(); });
 
-        DOM.exportJsonBtn.addEventListener('click', () => {
-            if (items.length === 0) {
-                alert('没有可导出的数据。');
-                return;
-            }
-            const dataStr = JSON.stringify(items, null, 4);
-            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'items.json';
-
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        });
-
+        // --- 事件监听 ---
         DOM.searchBox.addEventListener('input', renderItemList);
         DOM.typeFilter.addEventListener('change', renderItemList);
         DOM.itemForm.addEventListener('input', handleFormInput);
         DOM.addItemBtn.addEventListener('click', addNewItem);
         DOM.deleteItemBtn.addEventListener('click', deleteItem);
+        DOM.saveChangesBtn.addEventListener('click', saveChanges);
+        DOM.revertChangesBtn.addEventListener('click', revertChanges);
 
+        // --- 启动 ---
         setupDropdowns();
     });
 </script>
