@@ -1,0 +1,49 @@
+此文档用于nano banana pro生成2d游戏资产
+
+1.生成2.5d像素风的元素
+模板：
+{
+  "asset_generator_config": {
+    "project_name": "Retro RPG Isometric Assets",
+    "target_style": "16-bit Pixel Art",
+    "engine_compatibility": "libGDX / Unity 2D"
+  },
+  "prompt_template": {
+    "viewpoint": "Isometric view",
+    "art_style": [
+      "16-bit pixel art",
+      "retro RPG game asset",
+      "detailed pixel texture",
+      "vibrant colors"
+    ],
+    "technical_constraints": [
+      "isolated on solid white background",
+      "clean sharp edges",
+      "no ground shadow",
+      "full body",
+      "uncropped"
+    ],
+    "quality_boosters": [
+      "high quality",
+      "masterpiece"
+    ]
+  },
+  "negative_prompt": [
+    "blurry",
+    "anti-aliasing",
+    "fuzzy",
+    "photorealistic",
+    "3d render",
+    "noise",
+    "compression artifacts",
+    "text",
+    "watermark",
+    "dithering"
+  ],
+  "variables": {
+    "subject_description": "这里填写你要生成的具体物体描述"
+  }
+}
+
+1.1 生成粉红色樱花树
+提示词：single pink sakura tree, lush foliage, brown trunk
